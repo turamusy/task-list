@@ -23,3 +23,7 @@ client/.vite
 
 # VSCode settings
 .vscode
+
+# .gitignore
+client/.env
+server/.env
