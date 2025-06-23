@@ -28,7 +28,7 @@ const SortableItem = React.memo(({ item, onToggle, isDraggable }: { item: IListI
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center justify-between p-5 border rounded shadow mb-2 ${item.selected ? 'bg-blue-300' : 'bg-blue-100'}`}
+      className={`select-none cursor-grab flex items-center justify-between p-5 border rounded shadow mb-2 ${item.selected ? 'bg-blue-300' : 'bg-blue-100'}`}
     >
       {isDraggable ? <div
         className="cursor-grab flex-1"

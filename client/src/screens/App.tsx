@@ -173,7 +173,7 @@ const App = () => {
 
   /** Функция рендера DND контента */
   const renderSortableContent = (): JSX.Element => {
-    return <div className="flex-1 overflow-auto" ref={containerRef} onScroll={handleScroll} >
+    return <div className="flex-1 overflow-auto touch-none" ref={containerRef} onScroll={handleScroll} >
       <DndContext  collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <SortableContext items={visibleItems.map(i => i.id)} strategy={verticalListSortingStrategy} >
           {itemsToRender.map(item => (
