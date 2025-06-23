@@ -12,4 +12,5 @@ export const TEXT = {
   alertSelect: 'The selection could not be saved. Try again.',
   apiRequestError: 'API request error:',
   apiRequestUnknownError: 'Unknown error occurred during API request',
+  trigramChar: '☰',
 } as const;

@@ -2,6 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import React from "react";
 import { IListItem } from "../interfaces/list-item";
 import { CSS } from '@dnd-kit/utilities';
+import { TEXT } from "../constants";
 
 /** 
  * Комонент списка. 
@@ -10,7 +11,12 @@ import { CSS } from '@dnd-kit/utilities';
  * @param onToggle - функция для обработки переключения состояния выбора элемента
  * @param isDraggable - флаг, указывающий, можно ли перетаскивать элемент(используется для отключения во время поиска)
  */
-const SortableItem = React.memo(({ item, onToggle, isDraggable }: { item: IListItem; onToggle: (item: IListItem) => void; isDraggable?: boolean }) => {
+const SortableItem = React.memo(({ item, onToggle, isDraggable = true, isActive }: {
+  item: IListItem;
+  onToggle: (item: IListItem) => void;
+  isDraggable?: boolean
+  isActive?: boolean
+}) => {
   const {
     attributes,
     listeners,
@@ -28,16 +34,19 @@ const SortableItem = React.memo(({ item, onToggle, isDraggable }: { item: IListI
     <div
       ref={setNodeRef}
       style={style}
-      className={`select-none cursor-grab flex items-center justify-between p-5 border rounded shadow mb-2 ${item.selected ? 'bg-blue-300' : 'bg-blue-100'}`}
+      className={`flex items-center justify-between py-5 pr-5 border rounded shadow mb-2
+        ${!isDraggable ? 'pl-5' : ''}
+        ${isActive ? 'opacity-40' : ''} 
+        ${item.selected ? 'bg-blue-300' : 'bg-blue-100'}`}
     >
       {isDraggable ? <div
-        className="cursor-grab flex-1"
+        className="cursor-grab w-10 touch-pan-x select-none"
         {...listeners}
         {...attributes}
       >
-        <span>☰</span>
-        <span className='ml-5'>{item.value}</span>
-      </div> : <span className='ml-5'>{item.value}</span>} 
+        <span className="text-center justify-center flex items-center">{TEXT.trigramChar}</span>
+      </div> : null}
+      <span className='flex-1'>{item.value}</span>
       <input
         type="checkbox"
         checked={item.selected}

@@ -126,11 +126,15 @@ const App = () => {
   /** Обработка конца перетаскивания. Optimistic UI, меняем состояние сразу, если ответ от сервера с ошибкой то откатываем состояние. */
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
+    
     if (active.id !== over?.id) {
       const oldIndex = visibleItems.findIndex(i => i.id === active.id);
       const newIndex = visibleItems.findIndex(i => i.id === over?.id);
       const newOrder = arrayMove(visibleItems, oldIndex, newIndex);
+      
       setVisibleItems(newOrder);
+      setActiveId(null);
+      
       try {
         await postOrderItem(Number(active.id), Number(over?.id) ?? null);
       } catch (e) {
@@ -140,7 +144,6 @@ const App = () => {
         alert(TEXT.alertOrder);
       }
     }
-    setActiveId(null);
   };
 
   /** Обработка переключения. Переключаем селектор сразу, если какая либо ошибка то откатываем. */
@@ -173,11 +176,11 @@ const App = () => {
 
   /** Функция рендера DND контента */
   const renderSortableContent = (): JSX.Element => {
-    return <div className="flex-1 overflow-auto touch-none" ref={containerRef} onScroll={handleScroll} >
+    return <div className="flex-1 overflow-auto touch-pan-y" ref={containerRef} onScroll={handleScroll} >
       <DndContext  collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <SortableContext items={visibleItems.map(i => i.id)} strategy={verticalListSortingStrategy} >
           {itemsToRender.map(item => (
-            <SortableItem key={item.id} item={item} onToggle={toggleSelection} isDraggable={!isSearching} />
+            <SortableItem key={item.id} item={item} onToggle={toggleSelection} isDraggable={!isSearching} isActive={item.id === activeId} />
           ))}
         </SortableContext>
         <DragOverlay>
