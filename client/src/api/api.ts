@@ -31,7 +31,7 @@ export const getItems = async (offset: number, limit: number, searchTerm?: strin
  * @param selected - новое состояние выбора
  * @returns Promise с ответом сервера
  */
-export const postSelectItem = async (id: number, selected: boolean): Promise<any> => {
+export const postSelectItem = async (id: number, selected: boolean): Promise<{success: boolean}> => {
   try {
     return await apiRequest({
       url: ENDPOINTS.select,
@@ -49,7 +49,7 @@ export const postSelectItem = async (id: number, selected: boolean): Promise<any
  * @param afterId - id элемента, после которого вставить
  * @returns Promise с ответом сервера
  */
-export const postOrderItem = async (id: number, afterId: number | null): Promise<any> => {
+export const postOrderItem = async (id: number, afterId: number | null): Promise<{success: boolean}> => {
   try {
     return await apiRequest({
       url: ENDPOINTS.order,

@@ -11,11 +11,12 @@ import { TEXT } from "../constants";
  * @param onToggle - функция для обработки переключения состояния выбора элемента
  * @param isDraggable - флаг, указывающий, можно ли перетаскивать элемент(используется для отключения во время поиска)
  */
-const SortableItem = React.memo(({ item, onToggle, isDraggable = true, isActive }: {
+const SortableItem = React.memo(({ item, onToggle, isDraggable = true, isActive, selected }: {
   item: IListItem;
-  onToggle: (item: IListItem) => void;
-  isDraggable?: boolean
-  isActive?: boolean
+  onToggle: () => void;
+  isDraggable?: boolean;
+  isActive?: boolean;
+  selected?: boolean;
 }) => {
   const {
     attributes,
@@ -37,7 +38,7 @@ const SortableItem = React.memo(({ item, onToggle, isDraggable = true, isActive 
       className={`flex items-center justify-between py-5 pr-5 border rounded shadow mb-2
         ${!isDraggable ? 'pl-5' : ''}
         ${isActive ? 'opacity-40' : ''} 
-        ${item.selected ? 'bg-blue-300' : 'bg-blue-100'}`}
+        ${selected ? 'bg-blue-300' : 'bg-blue-100'}`}
     >
       {isDraggable ? <div
         className="cursor-grab w-10 touch-pan-x select-none"
@@ -49,8 +50,8 @@ const SortableItem = React.memo(({ item, onToggle, isDraggable = true, isActive 
       <span className='flex-1'>{item.value}</span>
       <input
         type="checkbox"
-        checked={item.selected}
-        onChange={() => onToggle(item)}
+        checked={selected}
+        onChange={onToggle}
         className="ml-2"
       />
     </div>
