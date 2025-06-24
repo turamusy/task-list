@@ -58,13 +58,42 @@ export function updateSelection(id: number, selected: boolean): boolean {
  */
 export function reorderItem(id: number, afterId: number | null): boolean {
   try {
-    const currentIndex = state.order.indexOf(`Item ${id}`);
+    const itemLabel = `Item ${id}`;
+    const afterItemLabel = afterId !== null ? `Item ${afterId}` : null;
+
+    const currentIndex = state.order.indexOf(itemLabel);
     if (currentIndex === -1) return false;
 
-    state.order.splice(currentIndex, 1);
+    let insertIndex: number;
+    
+    if (afterItemLabel !== null) {
+      const afterIndex = state.order.indexOf(afterItemLabel);
+      if (afterIndex === -1) return false;
+      
+      if (currentIndex < afterIndex) {
+        // Перемещаем вперед (сверху вниз) - вставляем ПОСЛЕ afterId
+        insertIndex = afterIndex + 1;
+      } else {
+        // Перемещаем назад (снизу вверх) - вставляем ПЕРЕД afterId
+        insertIndex = afterIndex;
+      }
+    } else {
+      insertIndex = 0;
+    }
 
-    const insertIndex = afterId !== null ? state.order.indexOf(`Item ${afterId}`) + 1 : 0;
-    state.order.splice(insertIndex, 0, `Item ${id}`);
+    if (insertIndex === currentIndex) {
+      return true;
+    }
+
+    state.order.splice(insertIndex, 0, itemLabel);
+
+    /**
+     * Удаляем старую копию.
+     * Если перемещаем вниз (currentIndex < insertIndex), то после вставки старый элемент остался на том же месте.
+     * Если перемещаем вверх (currentIndex > insertIndex), то после вставки старый элемент сдвинулся на одну позицию вперед .
+     * */
+    const deleteIndex = currentIndex < insertIndex ? currentIndex : currentIndex + 1;    
+    state.order.splice(deleteIndex, 1);
 
     return true;
   } catch (e) {
